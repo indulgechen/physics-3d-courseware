@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>大学物理 · 3D 交互课件</title>
+<style>
+:root{
+  --paper:#f7f2e7;--ink:#2c2a24;--ink2:#6f6a5c;--ink3:#9a927f;
+  --accent:#b4432a;--line:rgba(80,64,40,.16);
+  --serif:"Source Han Serif SC","Songti SC","STSong","SimSun",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:radial-gradient(120% 80% at 50% 0%,#fdfaf1 0%,#f7f2e7 55%,#efe8d9 100%);
+  color:var(--ink);font-family:var(--sans);min-height:100vh;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:56px 24px 72px}
+.brand{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.18em;color:#8a8271}
+.brand i{width:6px;height:6px;background:var(--accent);transform:rotate(45deg)}
+h1{font-family:var(--serif);font-size:44px;font-weight:600;letter-spacing:.04em;margin:14px 0 6px}
+.dek{font-family:var(--serif);font-size:15px;color:#5f5a4e;margin:0;line-height:1.8}
+.meta{margin-top:14px;font-size:12px;color:var(--ink3);letter-spacing:.04em}
+.rule{height:1px;background:var(--line);margin:34px 0 30px}
+h2{font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:.08em;color:#3a362d;margin:38px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{
+  display:block;text-decoration:none;color:inherit;
+  background:rgba(255,253,247,.82);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;transition:transform .18s ease,box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(50,40,20,.12)}
+.thumb{aspect-ratio:16/10;background:#efe8d9;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.body{padding:14px 16px 16px}
+.tag{display:inline-block;font-size:10px;letter-spacing:.14em;color:var(--accent);margin-bottom:6px}
+.card h3{font-family:var(--serif);font-size:17px;font-weight:600;margin:0 0 6px;letter-spacing:.02em}
+.card p{margin:0;font-size:12.5px;line-height:1.7;color:#6b6558}
+.meta2{margin-top:10px;font-size:10.5px;color:#a09885;letter-spacing:.05em}
+.foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:11.5px;color:#9a927f;line-height:2}
+.foot a{color:#8a8271}
+@media (max-width:600px){
+  .wrap{padding:36px 16px 56px}
+  h1{font-size:32px}
+  .grid{grid-template-columns:1fr;gap:14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><i></i>大学物理 · 交互课件</div>
+  <h1>3D 交互课件合集</h1>
+  <p class="dek">配套马文蔚《大学物理》的课堂演示：单文件、离线可用、手机与电脑都能打开。</p>
+  <div class="meta">Canvas 2D 3D 投影 + three.js / Blender GLB　·　共 10 份课件</div>
+  <div class="rule"></div>
+
+  <h2>热学与工程</h2>
+  <div class="grid">
+    <a class="card" href="courseware/blast-furnace.html">
+      <div class="thumb"><img src="previews/furnace.png" alt="高炉"></div>
+      <div class="body">
+        <span class="tag">热学 · 工程</span>
+        <h3>铁的冶炼 · 高炉</h3>
+        <p>炉料下行、热风上行，看焦炭燃烧、铁水与炉渣分层。</p>
+        <div class="meta2">单文件 55 KB · 拖拽旋转 · 可作课堂引入</div>
+      </div>
+    </a>
+    <a class="card" href="courseware/heat-engine-2d.html">
+      <div class="thumb"><img src="previews/engine-2d.png" alt="热机"></div>
+      <div class="body">
+        <span class="tag">热学 · 循环</span>
+        <h3>热机（蒸汽机）· 轻量版</h3>
+        <p>锅炉—汽缸—冷凝器—泵，Q₁ = W + Q₂，效率随 T₁ 变化。</p>
+        <div class="meta2">单文件 58 KB · 手写 3D 投影 · 秒开</div>
+      </div>
+    </a>
+    <a class="card" href="courseware/fridge-2d.html">
+      <div class="thumb"><img src="previews/fridge-2d.png" alt="制冷机"></div>
+      <div class="body">
+        <span class="tag">热学 · 循环</span>
+        <h3>制冷机（冰箱）· 轻量版</h3>
+        <p>蒸发器—压缩机—冷凝器—毛细管，e = Q₂/|W|，拖动 T₂ 实时算。</p>
+        <div class="meta2">单文件 56 KB · 同侧管路 · 状态分色</div>
+      </div>
+    </a>
+  </div>
+
+  <h2>热力学循环</h2>
+  <div class="grid">
+    <a class="card" href="courseware/carnot-cycle.html">
+      <div class="thumb"><img src="previews/carnot.png" alt="卡诺循环"></div>
+      <div class="body">
+        <span class="tag">热力学 · 卡诺循环</span>
+        <h3>热机与制冷机 · 卡诺循环</h3>
+        <p>同一套循环，正着走是热机、倒着走是制冷机；p–V 图与能量流同步。</p>
+        <div class="meta2">单文件 63 KB · 模式切换 · η 与 ε 对照</div>
+      </div>
+    </a>
+    <a class="card" href="courseware/heat-engine-3d.html">
+      <div class="thumb"><img src="previews/engine-3d.png" alt="热机 3D"></div>
+      <div class="body">
+        <span class="tag">热力学 · three.js</span>
+        <h3>热机 · 3D</h3>
+        <p>剖切汽缸 + 活塞连杆 + 飞轮，锅炉下烧柴火，蒸汽按状态分色。</p>
+        <div class="meta2">单文件 1.7 MB · 拖拽旋转 · 可离线</div>
+      </div>
+    </a>
+    <a class="card" href="courseware/fridge-3d.html">
+      <div class="thumb"><img src="previews/fridge-3d.png" alt="制冷机 3D"></div>
+      <div class="body">
+        <span class="tag">热力学 · three.js</span>
+        <h3>制冷机 · 3D</h3>
+        <p>半截面管路，能看到管内制冷剂；红-橙-蓝表示高温气体/高压液体/低温气体。</p>
+        <div class="meta2">单文件 2.06 MB · 双指缩放 · 状态分色</div>
+      </div>
+    </a>
+    <a class="card" href="courseware/fridge-responsive.html">
+      <div class="thumb"><img src="previews/fridge-responsive.png" alt="自适应版"></div>
+      <div class="body">
+        <span class="tag">热力学 · 自适应</span>
+        <h3>制冷机 · 自适应版</h3>
+        <p>一份文件兼顾手机和电脑：宽屏左右分栏，窄屏竖排滚动。</p>
+        <div class="meta2">单文件 2.04 MB · 960 px 断点 · 推荐</div>
+      </div>
+    </a>
+    <a class="card" href="courseware/heat-engine-mobile.html">
+      <div class="thumb"><img src="previews/engine-mobile.png" alt="热机手机版"></div>
+      <div class="body">
+        <span class="tag">热力学 · 手机版</span>
+        <h3>热机 · 手机版</h3>
+        <p>竖屏单列、可下滑：效率公式、三量关系、为什么 η &lt; 1 都在下面。</p>
+        <div class="meta2">单文件 1.7 MB · 触控 · 可滚动</div>
+      </div>
+    </a>
+    <a class="card" href="courseware/fridge-mobile.html">
+      <div class="thumb"><img src="previews/fridge-mobile.png" alt="制冷机手机版"></div>
+      <div class="body">
+        <span class="tag">热力学 · 手机版</span>
+        <h3>制冷机 · 手机版</h3>
+        <p>制冷系数公式、三量关系、为什么必须做功、怎么提高 e。</p>
+        <div class="meta2">单文件 2.04 MB · 触控 · 可滚动</div>
+      </div>
+    </a>
+  </div>
+
+  <h2>光学</h2>
+  <div class="grid">
+    <a class="card" href="courseware/double-slit.html">
+      <div class="thumb"><img src="previews/double-slit.png" alt="杨氏双缝"></div>
+      <div class="body">
+        <span class="tag">光学 · 干涉</span>
+        <h3>杨氏双缝干涉</h3>
+        <p>单缝 S、双缝 d，光程差 Δr = d sinθ；明纹暗纹随波长与间距实时变化，可切白光。</p>
+        <div class="meta2">单文件 84 KB · 可拖动的光程差标尺</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="foot">
+    所有课件均为单文件 HTML，离线可用；three.js 与 GLB 模型已内嵌。<br>
+    源码、Blender 脚本与构建脚本见仓库 <a href="README.md">README</a> 与 <code>src/</code>。<br>
+    许可：MIT
+  </div>
+</div>
+</body>
+</html>
