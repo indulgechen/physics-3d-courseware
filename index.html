@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f1e6">
 <title>制冷机 · 3D 交互课件</title>
 <style>
@@ -34,20 +34,42 @@ h1{
 }
 .dek{margin:0;font-family:var(--serif);font-size:12.5px;color:#5f5a4e;letter-spacing:.02em}
 
+/* ---------- 3D 舞台 ---------- */
+.hero{display:contents}
+.stagewrap{
+  position:relative;height:42vh;min-height:280px;max-height:420px;margin:8px 0 10px;
+}
 #stage3d{
-  position:relative;height:42vh;min-height:280px;max-height:420px;
-  margin:8px 0 10px;border-radius:14px;overflow:hidden;
+  position:absolute;inset:0;border-radius:14px;overflow:hidden;
   touch-action:none;cursor:grab;
   background:radial-gradient(120% 90% at 50% 30%,rgba(255,253,246,.55),rgba(255,253,246,0) 70%);
 }
 #stage3d:active{cursor:grabbing}
 #stage3d canvas{display:block;width:100%;height:100%}
+#leaders{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#chips{position:absolute;inset:0;pointer-events:none}
+.chip{
+  position:absolute;left:0;top:0;pointer-events:auto;opacity:0;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 10px;border-radius:18px;border:1px solid var(--line);
+  background:rgba(255,253,247,.95);color:#4a463c;font-size:12px;font-family:var(--sans);
+  box-shadow:0 4px 14px rgba(40,32,16,.10);white-space:nowrap;
+  transition:opacity .3s ease;
+}
+.chip b{
+  width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;
+  font-size:9.5px;display:flex;align-items:center;justify-content:center;font-weight:500;
+}
 .swipe{
   position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
   font-size:10px;color:#a09885;letter-spacing:.1em;
   background:rgba(255,253,247,.7);padding:3px 9px;border-radius:12px;pointer-events:none;
 }
+@media (max-width:959px){
+  #chips,#leaders{display:none}
+}
 
+/* ---------- 卡片 ---------- */
 .content{display:flex;flex-direction:column;gap:10px}
 .card{
   background:rgba(255,253,247,.78);border:1px solid var(--line);border-radius:12px;
@@ -63,15 +85,34 @@ h1{
 .card li{font-family:var(--serif);font-size:12.5px;line-height:1.75;color:#5f5a4e;margin-bottom:3px}
 .card li b{color:#3a362d}
 
+/* ---------- 能量 ---------- */
 .bar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:rgba(34,36,42,.08)}
 .bar i{display:block;height:100%;transition:width .4s ease}
 .bar .w{background:var(--accent)}
 .bar .q{background:#4d7fa8}
-.nums{display:flex;gap:12px;align-items:baseline;margin-top:8px;font-size:11px;color:#7d7666}
-.nums b{font-family:var(--serif);font-size:14px;color:#3a362d;font-weight:600;margin-left:2px}
-.nums .eta{margin-left:auto;color:var(--accent);font-size:12px}
-.nums .eta b{color:var(--accent);font-size:18px}
+.erows{margin-top:10px}
+.erows div{display:flex;align-items:baseline;gap:6px;padding:4px 0;border-bottom:1px dashed rgba(80,64,40,.10);font-size:12px;color:#7d7666}
+.erows div:last-child{border-bottom:0}
+.erows span{flex:1;font-family:var(--serif);font-size:12.5px;color:#5a5548}
+.erows b{font-family:var(--serif);font-size:15px;color:#3a362d;font-weight:600}
+.erows i{font-style:normal;font-size:10px;color:#a09885}
+.big-e{
+  display:flex;align-items:baseline;margin-top:10px;padding-top:9px;
+  border-top:1px dashed rgba(92,72,42,.22);
+}
+.big-e span{font-size:11px;letter-spacing:.12em;color:#8a8271}
+.big-e b{
+  margin-left:auto;font-family:var(--serif);font-size:26px;font-weight:400;
+  color:var(--accent);line-height:1;
+}
+.legend{display:flex;gap:12px;margin-top:10px;font-size:10px;color:#8b8578;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.legend .hot{background:#c81606}
+.legend .warm{background:#c96a12}
+.legend .cold{background:#0a53b0}
 
+/* ---------- 控件 ---------- */
 .ctl{display:flex;align-items:center;gap:10px;font-size:11.5px;color:#7d7666}
 .ctl label{flex:0 0 auto;letter-spacing:.08em}
 .ctl output{flex:0 0 52px;text-align:right;font-family:var(--serif);font-size:12px;color:#4a463c}
@@ -122,6 +163,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   margin:6px 0 4px;line-height:1.8;
 }
 
+/* ---------- 底部抽屉 ---------- */
 .sheet{
   position:fixed;left:0;right:0;bottom:0;z-index:20;
   background:linear-gradient(180deg,#fffdf7,#faf5e9);
@@ -129,7 +171,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   padding:16px 18px calc(18px + env(safe-area-inset-bottom));
   box-shadow:0 -12px 40px rgba(40,32,16,.18);
   transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.8,.2,1);
-  max-height:60dvh;overflow:auto;
+  max-height:70dvh;overflow:auto;
 }
 .sheet.open{transform:translateY(0)}
 .sheet .close{
@@ -142,7 +184,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   font-family:var(--serif);font-size:15px;color:#3a362d;
   background:#f3ead6;border-left:2px solid var(--accent);padding:8px 10px;border-radius:2px;
 }
-.sheet p{font-family:var(--serif);font-size:13px;line-height:1.8;color:#55534b;margin:10px 0 0}
+.sheet .body-txt{font-family:var(--serif);font-size:13px;line-height:1.8;color:#55534b;margin:10px 0 0}
+.sheet-more{margin:10px 0 0;padding-left:17px}
+.sheet-more li{font-family:var(--serif);font-size:12.5px;line-height:1.75;color:#5f5a4e;margin-bottom:4px}
 
 .toast{
   position:fixed;left:50%;top:calc(96px + env(safe-area-inset-top));transform:translateX(-50%);
@@ -151,20 +195,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 }
 .toast.show{opacity:1}
 
-@media (min-width:560px){
-  #app{max-width:560px;margin:0 auto}
-  h1{font-size:32px}
-}
-
-.legend{display:flex;gap:12px;margin-top:8px;font-size:10px;color:#8b8578;flex-wrap:wrap}
-.legend span{display:inline-flex;align-items:center;gap:4px}
-.legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
-.legend .hot{background:#c81606}
-.legend .warm{background:#c96a12}
-.legend .cold{background:#0a53b0}
-/* ---------- 宽屏：左 3D / 右文字 双栏 ---------- */
-.hero{display:contents}
-
+/* ---------- 宽屏：左 3D / 右文字 ---------- */
 @media (min-width: 960px){
   #app{
     max-width:none;margin:0;width:100%;
@@ -180,8 +211,11 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   h1{font-size:38px}
   .dek{font-size:14px}
   .hero{display:flex;align-items:center;grid-column:1;grid-row:2;min-height:0}
-  #stage3d{width:100%;height:100%;max-height:none;min-height:0;margin:0;border-radius:18px}
+  .stagewrap{width:100%;height:100%;min-height:0;max-height:none;margin:0}
+  #chips{display:block}
+  #leaders{display:block}
   .swipe,.toast{display:none}
+  .parts{display:none}
   .content{
     grid-column:2;grid-row:1 / span 2;
     overflow-y:auto;padding:6px 4px 26px 0;gap:12px;
@@ -193,10 +227,11 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   .fml{font-size:19px}
   .fml.sub{font-size:15.5px}
   .eq-line{font-size:17px}
-  .nums b{font-size:15px}
-  .nums .eta b{font-size:20px}
+  .erows b{font-size:16px}
+  .big-e b{font-size:30px}
   .foot{margin-top:10px}
 }
+
 </style>
 </head>
 <body>
@@ -209,7 +244,10 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   </header>
 
   <div class="hero">
-    <div id="stage3d">
+    <div class="stagewrap">
+      <div id="stage3d"></div>
+      <svg id="leaders"></svg>
+      <div id="chips"></div>
       <div class="swipe">下滑看原理 ↓</div>
     </div>
   </div>
@@ -217,18 +255,23 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   <main class="content">
 
     <section class="card">
-      <div class="bar"><i class="w" id="barW"></i><i class="q" id="barQ"></i></div>
-      <div class="nums">
-        <span>Q₂ <b id="q2">100.0</b></span>
-        <span>|W| <b id="wOut">11.1</b></span>
-        <span>Q₁ <b id="q1">111.1</b></span>
-        <span class="eta">e <b id="effOut">9.00</b></span>
-      </div>
+      <h3>原 理</h3>
+      <p>制冷机把低温热源（冷藏室）的热量 Q₂ 搬到高温热源（室内空气）。外界必须做功 |W|，所以排给室内的热量 Q₁ = Q₂ + |W| 比 Q₂ 还多。</p>
       <div class="legend">
         <span><i class="hot"></i>高温气体</span>
         <span><i class="warm"></i>高压液体</span>
         <span><i class="cold"></i>低温气体</span>
       </div>
+    </section>
+
+    <section class="card">
+      <div class="bar"><i class="w" id="barW"></i><i class="q" id="barQ"></i></div>
+      <div class="erows">
+        <div><span>Q₂ 蒸发器吸热</span><b id="q2">100.0</b><i>kJ</i></div>
+        <div><span>|W| 压缩机输入</span><b id="wOut">11.1</b><i>kJ</i></div>
+        <div><span>Q₁ 冷凝器放热</span><b id="q1">111.1</b><i>kJ</i></div>
+      </div>
+      <div class="big-e"><span>制冷系数 e</span><b id="effOut">9.00</b></div>
     </section>
 
     <section class="card">
@@ -289,7 +332,8 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
     <div class="eyebrow" id="sheetEyebrow"></div>
     <h2 id="sheetTitle"></h2>
     <div class="eq" id="sheetEq"></div>
-    <p id="sheetBody"></p>
+    <p class="body-txt" id="sheetBody"></p>
+    <ul class="sheet-more" id="sheetMore"></ul>
   </div>
 
   <div class="toast" id="toast">单指旋转 · 双指缩放</div>
@@ -5403,7 +5447,7 @@ window.__GLB_B64__="Z2xURgIAAAAgug8AxIsAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6Ikto
 
 ;
 /* ==========================================================
-   制冷机 · 手机版（three.js）
+   制冷机 · 3D 交互课件（电脑 / 手机自适应）
    ========================================================== */
 (() => {
 'use strict';
@@ -5434,18 +5478,54 @@ const STEPS = [
 ];
 
 const PARTS = [
-  { id: 'evap', num: 1, label: '蒸发器', eyebrow: '蒸发器 / 吸热', title: '在冷藏室里吸热',
+  {
+    id: 'evap', num: 1, label: '蒸发器', anchor: new THREE.Vector3(-1.05, 0.62, 0.25),
+    dx: -118, dy: -104,
+    eyebrow: '蒸发器 / 吸热', title: '在冷藏室里吸热',
     eq: 'Q₂ = 从冷藏室吸收的热量',
-    body: '低温低压的湿蒸气在蒸发器里沸腾吸热，把冷藏室的热量带走，自己变成气体。' },
-  { id: 'comp', num: 2, label: '压缩机', eyebrow: '压缩机 / 做功', title: '外界做功，压缩蒸气',
+    body: '低温低压的湿蒸气进入蒸发器，在等压条件下沸腾吸热，把冷藏室里的热量 Q₂ 带走，自己变成气体。',
+    more: [
+      '蒸发器就是冰箱里“结霜”的那一面，温度低于冷藏室。',
+      '液体蒸发要吸热，所以冷藏室越来越冷。',
+      '这一份热量 Q₂ 会被搬到室外，而不是“消失”。'
+    ]
+  },
+  {
+    id: 'comp', num: 2, label: '压缩机', anchor: new THREE.Vector3(0.02, 0.44, 0.2),
+    dx: 56, dy: 86,
+    eyebrow: '压缩机 / 做功', title: '外界做功，把蒸气压缩',
     eq: 'e = Q₂ / |W| = Q₂ / (Q₁ − Q₂)',
-    body: '压缩机把低温低压蒸气压缩成高温高压气体，这一步必须由外界做功，否则热量不会从低温流向高温。' },
-  { id: 'cond', num: 3, label: '冷凝器', eyebrow: '冷凝器 / 放热', title: '向室内空气放热',
+    body: '压缩机吸入低温低压蒸气并压缩，压力和温度同时升高。这一步必须由外界做功 |W|，否则热量不会自发地从低温流向高温。',
+    more: [
+      '压缩后的气体温度高于室温，才能在冷凝器里放热。',
+      '制冷系数 e = Q₂/|W|，表示“花一份功搬走多少热量”。',
+      '卡诺制冷机的上限 e = T₂/(T₁ − T₂)，实际制冷机低于这个值。'
+    ]
+  },
+  {
+    id: 'cond', num: 3, label: '冷凝器', anchor: new THREE.Vector3(1.07, 0.78, 0.2),
+    dx: 92, dy: -86,
+    eyebrow: '冷凝器 / 放热', title: '向室内空气放热',
     eq: 'Q₁ = Q₂ + |W|',
-    body: '高温高压气体在冷凝器里向室内放热，凝结成液体。所以冰箱背后的散热片总是热的。' },
-  { id: 'cap', num: 4, label: '毛细管', eyebrow: '毛细管 / 节流', title: '节流降压，温度骤降',
+    body: '高温高压气体在冷凝器里向室内空气放热 Q₁，温度降低并凝结成液体。所以冰箱背后的散热片是热的。',
+    more: [
+      '排出的热量 Q₁ 比从冷藏室吸走的 Q₂ 还多，多出来的就是功 |W|。',
+      '冷凝器越通风，散热越快，制冷效果越好。',
+      '这就是为什么不能把冰箱贴墙放。'
+    ]
+  },
+  {
+    id: 'cap', num: 4, label: '毛细管', anchor: new THREE.Vector3(-0.55, 0.13, 0.2),
+    dx: -110, dy: 52,
+    eyebrow: '毛细管 / 节流', title: '节流降压，温度骤降',
     eq: '高压液体 → 低温低压湿蒸气',
-    body: '液体经过又细又长的毛细管，压力骤降、温度降到 0 ℃ 以下，才能在蒸发器里吸热。' }
+    body: '液体经过又细又长的毛细管，压力骤降，一部分液体闪蒸吸热，温度降到 0 ℃ 以下，变成低温低压的湿蒸气。',
+    more: [
+      '毛细管相当于一个“节流阀”，让制冷剂循环起来。',
+      '节流后温度低于冷藏室，才能在蒸发器里吸热。',
+      '毛细管的粗细和长度决定了节流后的压力。'
+    ]
+  }
 ];
 
 /* ---------------- three.js ---------------- */
@@ -5599,6 +5679,50 @@ SEGS.forEach(s => {
   }
 });
 
+/* ---------------- 部件热点（宽屏） ---------------- */
+const chipsBox = document.getElementById('chips');
+const svg = document.getElementById('leaders');
+PARTS.forEach(p => {
+  const b = document.createElement('button');
+  b.className = 'chip';
+  b.type = 'button';
+  b.innerHTML = '<b>' + p.num + '</b><span>' + p.label + '</span>';
+  b.addEventListener('click', e => { e.stopPropagation(); openSheet(p); });
+  chipsBox.appendChild(b);
+  p._chip = b;
+
+  const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  ln.setAttribute('stroke', 'rgba(40,42,48,.28)');
+  ln.setAttribute('stroke-width', '1');
+  ln.setAttribute('stroke-dasharray', '3 4');
+  svg.appendChild(ln);
+  p._line = ln;
+});
+
+const _v = new THREE.Vector3();
+function updateChips() {
+  for (const p of PARTS) {
+    _v.copy(p.anchor).project(camera);
+    const behind = _v.z > 1;
+    const sx = (_v.x * 0.5 + 0.5) * W;
+    const sy = (-_v.y * 0.5 + 0.5) * H;
+    const cx = clamp(sx + p.dx, 74, W - 74);
+    const cy = clamp(sy + p.dy, 44, H - 44);
+    if (behind) {
+      p._chip.style.opacity = '0';
+      p._line.setAttribute('opacity', '0');
+      continue;
+    }
+    p._chip.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+    p._chip.style.opacity = '1';
+    p._line.setAttribute('x1', sx);
+    p._line.setAttribute('y1', sy);
+    p._line.setAttribute('x2', cx);
+    p._line.setAttribute('y2', cy);
+    p._line.setAttribute('opacity', '1');
+  }
+}
+
 /* ---------------- 界面 ---------------- */
 const $ = id => document.getElementById(id);
 
@@ -5655,6 +5779,7 @@ function openSheet(p) {
   $('sheetTitle').textContent = p.title;
   $('sheetEq').textContent = p.eq;
   $('sheetBody').textContent = p.body;
+  $('sheetMore').innerHTML = p.more.map(t => '<li>' + t + '</li>').join('');
   sheet.classList.add('open');
 }
 $('sheetClose').addEventListener('click', () => sheet.classList.remove('open'));
@@ -5688,6 +5813,7 @@ function frameBody(nowMs) {
 
   controls.update();
   renderer.render(scene, camera);
+  if (W > 1) updateChips();
   requestAnimationFrame(frameBody);
 }
 
